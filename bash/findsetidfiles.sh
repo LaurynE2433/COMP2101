@@ -27,5 +27,5 @@ echo ""
 
 echo "12 largests files sorted by size"
 echo "================================"
-find / -type f -exec ls -l --block-size=MB {} + 2>/dev/null | sort -hr -k 5 | head -n 12 | awk '{print $3, $5, $9}'
+find / -type f -exec ls -l --block-size=GB {} + 2>/dev/null | sort -hr -k 5 | head -n 12 | awk '{print $3, $5, $9}'
 exit
