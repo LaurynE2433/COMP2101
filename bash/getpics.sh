@@ -29,7 +29,6 @@ wget -q -O ~/public_html/pics/pics.zip http://zonzorp.net/pics.zip && unzip -d ~
 #     then delete the local copy of the tarfile if the extraction was successful
 
 # Make a report on what we have in the Pictures directory
-
 test -d ~/public_html/pics && cat <<EOF
 Found $(find ~/public_html/pics -type f|wc -l) files in the public_html/pics directory.
 The public_html/pics directory uses $(du -sh ~/public_html/pics|awk '{print $1}') space on the disk.
