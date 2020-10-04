@@ -14,5 +14,5 @@ sum=$(($firstnum + $secondnum + $thirdnum))
 product=$(($firstnum * $secondnum * $thirdnum))
 cat <<EOF
 The sum of $firstnum plus $secondnum plus $thirdnum is $sum
-Product of $firstnum, $secondnum, $thirdnum is $product
+Product of $firstnum times $secondnum times $thirdnum is $product
 EOF
