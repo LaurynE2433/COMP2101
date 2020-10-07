@@ -19,7 +19,7 @@ pcNum=$"pc$studentNum"
 if grep -Fxq "$pcNum" /etc/hostname ; then
   echo "$pcNum is already your hostname"
 elif hostnamectl set-hostname "$pcNum" ; then
-  echo "your hostname has been change. Please rebootto see this change"
+  echo "your hostname has been change. Please reboot to see this change"
 fi 
 # If that hostname is not the current hostname, change it using the hostnamectl command and
 #     tell the user you changed the current hostname and they should reboot to make sure the new name takes full effect
