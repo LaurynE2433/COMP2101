@@ -3,7 +3,7 @@
 # It is expected that you use this script to test if MYVAR is inherited from a parent process
 #   since it is not created or modified in this script
 export MYVAR
-MYVAR="some data"
+MYVAR=
 [ -v MYVAR ] && echo "The variable MYVAR exists"
 [ -v MYVAR ] || echo "The variable MYVAR does not exist"
 
