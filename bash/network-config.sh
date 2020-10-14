@@ -81,6 +81,8 @@ lanIP=$(ip a s $interfaceName | awk '/inet /{gsub(/\/.*/,"");print $2}')
 lanHost=$(getent hosts $lanIP | awk '{print $2}')
 extIP=$(curl -s icanhazip.com)
 extName=$(getent hosts $extIP | awk '{print $2}')
+routerIP=$(ip r | awk '/def{gsub(/\/.*,""); print $3}')
+routerName=$(getent hosts $routerIP | awk '{print $2}')
 
 cat <<EOF
 Hostname        : $hostname
@@ -88,4 +90,6 @@ LAN Address     : $lanIP
 LAN Hostname    : $lanHost
 External IP     : $extIP
 External Name   : $extName
+Router IP       : $routerIP
+Router Name     : $routerName
 EOF
