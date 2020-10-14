@@ -75,7 +75,7 @@
 #   External IP     : $myExternalIP
 #   External Name   : $myExternalName
 ###########
-hostname=$hostname
+hostname=$(hostname)
 interfaceName=$(ip a | awk '/: e/{gsub(/:/,"");print $2}')
 lanIP=$(ip a s $interfaceName | awk '/inet /{gsub(/\/.*/,"");print $2}')
 lanHost=$(getent hosts $lanIP | awk '{print $2}')
