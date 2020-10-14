@@ -77,16 +77,16 @@
 ###########
 hostname=$(hostname)
 interfaceName=$(ip a | awk '/: e/{gsub(/:/,"");print $2}')
-lanIP=$(ip a s $interfaceName | awk '/inet /{gsub(/\/.*/,"");print $2}')
-lanHost=$(getent hosts $lanIP | awk '{print $2}')
+lanAdd=$(ip a s $interfaceName | awk '/inet /{gsub(/\/.*/,"");print $2}')
+lanHost=$(getent hosts $lanAdd | awk '{print $2}')
 extIP=$(curl -s icanhazip.com)
 extName=$(getent hosts $extIP | awk '{print $2}')
-routerIP=$(ip route show default | awk '{print $3}')
+routerIP=$(ip r | grep "^default" | awk '{print $3}')
 routerName=$(getent hosts $routerIP | awk '{print $2}')
 
 cat <<EOF
 Hostname        : $hostname
-LAN Address     : $lanIP
+LAN Address     : $lanAdd
 LAN Hostname    : $lanHost
 External IP     : $extIP
 External Name   : $extName
