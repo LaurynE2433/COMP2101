@@ -126,7 +126,7 @@ then
   exit
 fi
 
-for interface in 'ip link show | awk 'NR%2==1 {print $2}' | cut -d : -f 1'; do
+for interface in `ip link show | awk 'NR%2==1 {print $2}' | cut -d : -f 1`; do
   [ $interface = "lo" ] && continue
-  generateReport $interface 
+  generateReport $interface
 done
