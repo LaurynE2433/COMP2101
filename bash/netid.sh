@@ -95,7 +95,7 @@ EOF
 if [ "$interface" = '' ]; then
   interface=$(ip a | awk '/: e/{gsub(/:/,"");print $2}' | sed -e s/@ens34//g)
 else
-  interfaces=$interfaces
+  interfaces=$interface
 fi
 
 for interface in $interfaces; do
@@ -129,4 +129,4 @@ EOF
 #####
 # End of per-interface report
 #####
-done 
+done
