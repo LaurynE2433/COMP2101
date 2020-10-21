@@ -30,25 +30,8 @@
 #####
 # Once per host report
 #####
-verbose="yes"
-interface=''
-
-while [ $# -gt 0 ]; do
-  case "$1" in
-    -v)
-        verbose="yes"
-        ;;
-    *)
-    if [ "$interface" = '' ]; then
-      interface=$1
-    else
-      echo "Invalid Output"
-      exit
-    fi
-    ;;
-  esac
-  shift
-done
+generateReport () {
+  interface=$1
 
 [ "$verbose" = "yes" ] && echo "Gathering host information"
 # we use the hostname command to get our system name
@@ -92,31 +75,25 @@ EOF
 #####
 
 # define the interface being summarized
-if [ "$interface" = '' ]; then
-  interface=$(ip a | awk '/: e/{gsub(/:/,"");print $2}' | sed -e s/@ens34//g)
-else
-  interfaces=$interface
-fi
 
-for interface in $interfaces; do
-  [ "$verbose" = "yes" ] && echo "Reporting on interface(s): $interface"
+[ "$verbose" = "yes" ] && echo "Reporting on interface(s): $interface"
 
-  [ "$verbose" = "yes" ] && echo "Getting IPV4 address and name for interface $interface"
+[ "$verbose" = "yes" ] && echo "Getting IPV4 address and name for interface $interface"
 # Find an address and hostname for the interface being summarized
 # we are assuming there is only one IPV4 address assigned to this interface
-  ipv4_address=$(ip a s $interface|awk -F '[/ ]+' '/inet /{print $3}')
-  ipv4_hostname=$(getent hosts $ipv4_address | awk '{print $2}')
+ipv4_address=$(ip a s $interface|awk -F '[/ ]+' '/inet /{print $3}')
+ipv4_hostname=$(getent hosts $ipv4_address | awk '{print $2}')
 
-  [ "$verbose" = "yes" ] && echo "Getting IPV4 network block info and name for interface $interface"
+[ "$verbose" = "yes" ] && echo "Getting IPV4 network block info and name for interface $interface"
 # Identify the network number for this interface and its name if it has one
 # Some organizations have enough networks that it makes sense to name them just like how we name hosts
 # To ensure your network numbers have names, add them to your /etc/networks file, one network to a line, as   networkname networknumber
 #   e.g. grep -q mynetworknumber /etc/networks || (echo 'mynetworkname mynetworknumber' |sudo tee -a /etc/networks)
-  network_address=$(ip route list dev $interface scope link|cut -d ' ' -f 1)
-  network_number=$(cut -d / -f 1 <<<"$network_address")
-  network_name=$(getent networks $network_number|awk '{print $1}')
+network_address=$(ip route list dev $interface scope link|cut -d ' ' -f 1)
+network_number=$(cut -d / -f 1 <<<"$network_address")
+network_name=$(getent networks $network_number|awk '{print $1}')
 
-  cat <<EOF
+cat <<EOF
 
 Interface $interface:
 ===============
@@ -129,4 +106,27 @@ EOF
 #####
 # End of per-interface report
 #####
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -v)
+        verbose="yes"
+        ;;
+    *)
+      interface=$1
+    ;;
+  esac
+  shift
+done
+
+if [ $interface ]
+then
+  generateReport $interface
+  exit
+fi
+
+for interface in 'ip link show | awk 'NR%2==1 {print $2}' | cut -d : -f 1'; do
+  [ $interface = "lo" ] && continue
+  generateReport $interface 
 done
