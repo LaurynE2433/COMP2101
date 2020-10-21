@@ -30,7 +30,7 @@
 #####
 # Once per host report
 #####
-verbose="no"
+verbose="yes"
 interface=''
 
 while [ $# -gt 0 ]; do
