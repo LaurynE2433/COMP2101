@@ -39,7 +39,16 @@ function displayhelp {
 
 # This function will remove all the temp files created by the script
 # The temp files are all named similarly, "/tmp/somethinginfo.$$"
+function cleanup {
+  rm /tmp/sysinfo.$$ /tmp/memoryinfo.$$ /tmp/businfo.$$ /tmp/cpuinfo.$$
+  logger -t 'basename "$0"' -i -p user.info -s "Cleaning up files"
+  exit 1
+}
 # A trap command is used after the function definition to specify this function is to be run if we get a ^C while running
+trap cleanup SIGHUP
+trap cleanup SIGTERM
+trap cleanup SIGINT
+trap cleanup SIGQUIT
 
 # End of section to be done for TASK
 # Remainder of script does not require any modification, but may need to be examined in order to create the functions for TASK
